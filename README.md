@@ -19,6 +19,21 @@ The application fetches remote job listings from the Remotive public API, calcul
 
 ---
 
+# Why This Project Matters
+
+This project focuses not only on frontend UI development, but also on backend engineering concepts such as:
+
+- API result shaping
+- data optimization
+- recommendation algorithms
+- middleware architecture
+- frontend/backend separation
+- scalable TypeScript structure
+
+The goal was to demonstrate practical engineering decision-making under realistic constraints.
+
+---
+
 # Tech Stack
 
 ## Frontend
