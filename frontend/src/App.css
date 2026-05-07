@@ -123,3 +123,15 @@
   font-weight: 700;
   text-decoration: none;
 }
+
+.result-count,
+.empty-state {
+  max-width: 900px;
+  margin: 0 auto 18px;
+  color: #475569;
+  font-weight: 600;
+}
+
+.empty-state {
+  text-align: center;
+}

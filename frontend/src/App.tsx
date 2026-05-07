@@ -74,6 +74,18 @@ function App() {
       </section>
 
       {error && <p className="error">{error}</p>}
+      
+      {!loading && jobs.length > 0 && (
+         <p className="result-count">
+           Showing {jobs.length} optimized remote jobs
+         </p>
+      )}
+
+      {!loading && jobs.length === 0 && !error && (
+        <p className="empty-state">
+       Enter your country and timezone, then click Find Jobs.
+      </p>
+      )}
 
       <section className="jobs-list">
         {jobs.map((job) => (
