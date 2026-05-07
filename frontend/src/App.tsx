@@ -14,7 +14,8 @@ type Job = {
 };
 
 function App() {
-  const [region, setRegion] = useState("Sri Lanka");
+  const [country, setCountry] = useState("Sri Lanka");
+  const [timezone, setTimezone] = useState("Asia/Colombo");
   const [jobs, setJobs] = useState<Job[]>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
@@ -24,9 +25,12 @@ function App() {
       setLoading(true);
       setError("");
 
-      const response = await fetch(
-        `http://localhost:5000/api/jobs?region=${encodeURIComponent(region)}`
-      );
+      const query = new URLSearchParams({
+        country,
+        timezone,
+      }).toString();
+
+      const response = await fetch(`http://localhost:5000/api/jobs?${query}`);
 
       if (!response.ok) {
         throw new Error("Failed to fetch jobs");
@@ -34,7 +38,7 @@ function App() {
 
       const data: Job[] = await response.json();
       setJobs(data);
-    } catch (err) {
+    } catch {
       setError("Something went wrong while fetching jobs.");
     } finally {
       setLoading(false);
@@ -46,16 +50,23 @@ function App() {
       <section className="hero">
         <h1>Remote Job Optimizer</h1>
         <p>
-          Enter your country or timezone and get remote jobs ranked by
-          suitability.
+          Find remote jobs ranked by timezone compatibility, region match, and
+          salary availability.
         </p>
 
         <div className="search-box">
           <input
-            value={region}
-            onChange={(e) => setRegion(e.target.value)}
-            placeholder="Enter country or timezone"
+            value={country}
+            onChange={(e) => setCountry(e.target.value)}
+            placeholder="Country / Region"
           />
+
+          <input
+            value={timezone}
+            onChange={(e) => setTimezone(e.target.value)}
+            placeholder="Timezone"
+          />
+
           <button onClick={fetchJobs} disabled={loading}>
             {loading ? "Searching..." : "Find Jobs"}
           </button>
@@ -78,6 +89,7 @@ function App() {
             <p>
               <strong>Location:</strong> {job.location}
             </p>
+
             <p>
               <strong>Salary:</strong> {job.salary}
             </p>

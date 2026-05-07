@@ -24,13 +24,14 @@
 
 .search-box {
   margin-top: 24px;
-  display: flex;
+  display: grid;
+  grid-template-columns: 1fr 1fr auto;
   gap: 12px;
   justify-content: center;
 }
 
 .search-box input {
-  width: 320px;
+  width: 100%;
   padding: 14px 16px;
   border: 1px solid #cbd5e1;
   border-radius: 12px;
