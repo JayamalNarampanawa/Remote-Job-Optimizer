@@ -18,7 +18,7 @@ app.get("/api/health", (req, res) => {
         message: "Remote Job Optimizer API is running",
     });
 });
-const frontendDistPath = path_1.default.join(__dirname, "../../frontend/dist");
+const frontendDistPath = path_1.default.join(process.cwd(), "../frontend/dist");
 app.use(express_1.default.static(frontendDistPath));
 app.use((req, res) => {
     res.sendFile(path_1.default.join(frontendDistPath, "index.html"));
