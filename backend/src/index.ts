@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import path from "path";
 
 import jobsRoutes from "./routes/jobs";
 
@@ -13,10 +14,18 @@ app.use(express.json());
 
 app.use("/api/jobs", jobsRoutes);
 
-app.get("/", (req, res) => {
+app.get("/api/health", (req, res) => {
   res.json({
     message: "Remote Job Optimizer API is running",
   });
+});
+
+const frontendDistPath = path.join(__dirname, "../../frontend/dist");
+
+app.use(express.static(frontendDistPath));
+
+app.use((req, res) => {
+  res.sendFile(path.join(frontendDistPath, "index.html"));
 });
 
 const PORT = process.env.PORT || 5000;

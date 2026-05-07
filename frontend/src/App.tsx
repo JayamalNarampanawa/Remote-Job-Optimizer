@@ -25,7 +25,7 @@ function App() {
       setError("");
 
       const query = new URLSearchParams({ country, timezone }).toString();
-      const response = await fetch(`http://localhost:5000/api/jobs?${query}`);
+      const response = await fetch(`/api/jobs?${query}`);
 
       if (!response.ok) throw new Error("Failed to fetch jobs");
 
