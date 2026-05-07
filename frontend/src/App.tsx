@@ -1,5 +1,4 @@
 import { useState } from "react";
-import "./App.css";
 
 type Job = {
   id: number;
@@ -25,16 +24,10 @@ function App() {
       setLoading(true);
       setError("");
 
-      const query = new URLSearchParams({
-        country,
-        timezone,
-      }).toString();
-
+      const query = new URLSearchParams({ country, timezone }).toString();
       const response = await fetch(`http://localhost:5000/api/jobs?${query}`);
 
-      if (!response.ok) {
-        throw new Error("Failed to fetch jobs");
-      }
+      if (!response.ok) throw new Error("Failed to fetch jobs");
 
       const data: Job[] = await response.json();
       setJobs(data);
@@ -46,84 +39,153 @@ function App() {
   };
 
   return (
-    <main className="app">
-      <section className="hero">
-        <h1>Remote Job Optimizer</h1>
-        <p>
-          Find remote jobs ranked by timezone compatibility, region match, and
-          salary availability.
-        </p>
+    <main className="min-h-screen bg-[#020617] text-slate-100">
+      <div className="mx-auto max-w-6xl px-5 py-12">
+        <section className="text-center">
+          <div className="mx-auto mb-6 flex h-14 w-14 items-center justify-center rounded-2xl border border-violet-500/30 bg-violet-500/10 text-2xl">
+            💼
+          </div>
 
-        <div className="search-box">
-          <input
-            value={country}
-            onChange={(e) => setCountry(e.target.value)}
-            placeholder="Country / Region"
-          />
+          <h1 className="text-4xl font-extrabold tracking-tight sm:text-6xl">
+            Remote Job{" "}
+            <span className="bg-gradient-to-r from-blue-400 to-violet-500 bg-clip-text text-transparent">
+              Optimizer
+            </span>
+          </h1>
 
-          <input
-            value={timezone}
-            onChange={(e) => setTimezone(e.target.value)}
-            placeholder="Timezone"
-          />
+          <p className="mx-auto mt-5 max-w-2xl text-base text-slate-400 sm:text-lg">
+            Find remote jobs ranked by timezone compatibility, region match,
+            and salary availability.
+          </p>
+        </section>
 
-          <button onClick={fetchJobs} disabled={loading}>
-            {loading ? "Searching..." : "Find Jobs"}
-          </button>
-        </div>
-      </section>
+        <section className="mt-10 rounded-3xl border border-slate-800 bg-slate-900/70 p-4 shadow-2xl shadow-violet-950/20 backdrop-blur sm:p-6">
+          <div className="grid gap-4 lg:grid-cols-[1fr_1fr_auto]">
+            <div className="rounded-2xl border border-slate-700 bg-slate-950/70 px-4 py-3">
+              <label className="text-sm text-slate-400">Country / Region</label>
+              <input
+                value={country}
+                onChange={(e) => setCountry(e.target.value)}
+                className="mt-1 w-full bg-transparent text-lg font-semibold text-white outline-none"
+              />
+            </div>
 
-      {error && <p className="error">{error}</p>}
-      
-      {!loading && jobs.length > 0 && (
-         <p className="result-count">
-           Showing {jobs.length} optimized remote jobs
-         </p>
-      )}
+            <div className="rounded-2xl border border-slate-700 bg-slate-950/70 px-4 py-3">
+              <label className="text-sm text-slate-400">Timezone</label>
+              <input
+                value={timezone}
+                onChange={(e) => setTimezone(e.target.value)}
+                className="mt-1 w-full bg-transparent text-lg font-semibold text-white outline-none"
+              />
+            </div>
 
-      {!loading && jobs.length === 0 && !error && (
-        <p className="empty-state">
-       Enter your country and timezone, then click Find Jobs.
-      </p>
-      )}
+            <button
+              onClick={fetchJobs}
+              disabled={loading}
+              className="rounded-2xl bg-gradient-to-r from-blue-500 to-violet-600 px-8 py-4 font-bold text-white shadow-lg shadow-violet-900/30 transition hover:scale-[1.02] disabled:cursor-not-allowed disabled:opacity-60"
+            >
+              {loading ? "Searching..." : "Find Jobs"}
+            </button>
+          </div>
+        </section>
 
-      <section className="jobs-list">
-        {jobs.map((job) => (
-          <article key={job.id} className="job-card">
-            <div className="job-header">
-              <div>
-                <h2>{job.title}</h2>
-                <p>{job.company}</p>
+        {error && (
+          <p className="mt-6 rounded-2xl border border-red-500/30 bg-red-500/10 p-4 text-center text-red-300">
+            {error}
+          </p>
+        )}
+
+        {!loading && jobs.length === 0 && !error && (
+          <p className="mt-8 text-center text-slate-400">
+            Enter your country and timezone, then click Find Jobs.
+          </p>
+        )}
+
+        {!loading && jobs.length > 0 && (
+          <div className="mt-8 rounded-2xl border border-slate-800 bg-slate-900/60 p-5 text-slate-300">
+            Showing{" "}
+            <span className="font-bold text-emerald-400">{jobs.length}</span>{" "}
+            optimized remote jobs
+          </div>
+        )}
+
+        {loading && (
+          <div className="mt-8 grid gap-5">
+            {[1, 2, 3].map((item) => (
+              <div
+                key={item}
+                className="h-52 animate-pulse rounded-3xl border border-slate-800 bg-slate-900/60"
+              />
+            ))}
+          </div>
+        )}
+
+        <section className="mt-6 grid gap-5">
+          {jobs.map((job) => (
+            <article
+            key={job.id}
+             className="rounded-3xl border border-slate-800 bg-gradient-to-br from-slate-900 to-slate-950 p-6 shadow-xl shadow-black/30 transition duration-300 hover:-translate-y-1 hover:border-violet-500/50"
+            >
+              <div className="flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
+                <div className="flex-1">
+                  <p className="text-sm font-bold text-violet-400">
+                    {job.title}
+                  </p>
+
+                  <h2 className="mt-2 text-2xl font-extrabold text-white">
+                    {job.company}
+                  </h2>
+
+                  <div className="mt-4 flex flex-wrap gap-3 text-sm text-slate-300">
+                    <span className="rounded-full border border-slate-700 px-4 py-2">
+                      🌍 {job.location}
+                    </span>
+                    <span className="rounded-full border border-slate-700 px-4 py-2">
+                      💰 {job.salary}
+                    </span>
+                  </div>
+
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {job.tags.slice(0, 6).map((tag) => (
+                      <span
+                        key={tag}
+                        className="rounded-full bg-blue-500/10 px-3 py-1 text-xs font-semibold text-blue-300 ring-1 ring-blue-400/20"
+                      >
+                        {tag}
+                      </span>
+                    ))}
+                  </div>
+
+                  <ul className="mt-5 space-y-2 text-slate-300">
+                    {job.reasons.map((reason) => (
+                      <li key={reason} className="flex items-center gap-2">
+                        <span className="text-emerald-400">✓</span>
+                        {reason}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <div className="flex flex-col items-center gap-4">
+                  <div className="flex h-24 w-24 items-center justify-center rounded-full border-8 border-violet-500/80 bg-slate-950 text-3xl font-extrabold text-white">
+                    {job.score}
+                  </div>
+                  <p className="text-sm text-slate-400">Match Score</p>
+
+                  <a
+                    href={job.url}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="rounded-xl border border-violet-500/50 bg-violet-500/10 px-5 py-3 font-bold text-violet-300 transition hover:bg-violet-500 hover:text-white"
+                  >
+                    View Job ↗
+                  </a>
+                </div>
               </div>
-              <span className="score">{job.score}</span>
-            </div>
-
-            <p>
-              <strong>Location:</strong> {job.location}
-            </p>
-
-            <p>
-              <strong>Salary:</strong> {job.salary}
-            </p>
-
-            <div className="tags">
-              {job.tags.slice(0, 5).map((tag) => (
-                <span key={tag}>{tag}</span>
-              ))}
-            </div>
-
-            <ul>
-              {job.reasons.map((reason) => (
-                <li key={reason}>{reason}</li>
-              ))}
-            </ul>
-
-            <a href={job.url} target="_blank" rel="noreferrer">
-              View Job
-            </a>
-          </article>
-        ))}
-      </section>
+            </article>
+          ))}
+        </section>
+      </div>
     </main>
   );
 }
