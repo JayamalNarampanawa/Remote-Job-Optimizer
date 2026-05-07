@@ -2,43 +2,52 @@ type Job = {
   candidate_required_location?: string;
   salary?: string;
   tags?: string[];
+  category?: string;
+};
+
+type UserPreference = {
+  country: string;
+  timezone: string;
 };
 
 export const calculateSuitabilityScore = (
   job: Job,
-  userRegion: string
+  userPreference: UserPreference
 ) => {
   let score = 0;
-
   const reasons: string[] = [];
 
   const location = job.candidate_required_location?.toLowerCase() || "";
+  const country = userPreference.country.toLowerCase();
+  const timezone = userPreference.timezone.toLowerCase();
 
-  // Region match
-  if (location.includes(userRegion.toLowerCase())) {
+  if (country && location.includes(country)) {
     score += 40;
-    reasons.push("Region/timezone compatible");
+    reasons.push("Job location matches your country/region");
   }
 
-  // Worldwide remote jobs
+  if (timezone && location.includes(timezone)) {
+    score += 30;
+    reasons.push("Job mentions your timezone");
+  }
+
   if (
     location.includes("worldwide") ||
-    location.includes("anywhere")
+    location.includes("anywhere") ||
+    location.includes("remote")
   ) {
     score += 25;
-    reasons.push("Worldwide remote friendly");
+    reasons.push("Remote-friendly location");
   }
 
-  // Salary exists
   if (job.salary && job.salary.trim() !== "") {
     score += 25;
-    reasons.push("Salary information available");
+    reasons.push("Salary information is available");
   }
 
-  // Relevant tags exist
   if (job.tags && job.tags.length > 0) {
     score += 10;
-    reasons.push("Relevant technology tags included");
+    reasons.push("Technology tags are available");
   }
 
   return {

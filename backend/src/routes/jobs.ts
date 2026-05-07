@@ -7,8 +7,8 @@ const router = express.Router();
 
 router.get("/", async (req, res) => {
   try {
-    const userRegion =
-      (req.query.region as string) || "Sri Lanka"; //Reads values from URL.
+    const country = (req.query.country as string) || "Sri Lanka";
+    const timezone = (req.query.timezone as string) || "Asia/Colombo"; //Reads values from URL.
 
     const response = await axios.get(
       "https://remotive.com/api/remote-jobs"
@@ -19,7 +19,7 @@ router.get("/", async (req, res) => {
     // Result shaping + scoring
     const optimizedJobs = jobs.map((job: any) => {
       const { score, reasons } =
-        calculateSuitabilityScore(job, userRegion);
+        calculateSuitabilityScore(job, { country, timezone });
 
       return {
         id: job.id,
